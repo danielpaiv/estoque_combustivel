@@ -45,7 +45,7 @@ $result = $conn->query($sql);
 <input type="date" id="dataFiltro" oninput="filtrarData()">
 
  <label for="filtroNome">Filtrar por serviços:</label>
-<input type="text" id="filtroNome" onkeyup="filtrarPorNome()">
+ <input type="text" id="filtroNome" onkeyup="filtrarPorNome()">
 
 <table id="clientesTabela">
     <thead>
