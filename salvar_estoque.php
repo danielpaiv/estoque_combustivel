@@ -17,13 +17,14 @@ if ($conn->connect_error) {
 $produto = $_POST['produto'];
 $estoque_sistema = $_POST['estoque_sistema'];
 $estoque_fisico = $_POST['estoque_fisico'];
+$data_venda = $_POST['data_venda'];
 
 // Preparar e executar a inserção
-$sql = "INSERT INTO estoque (produto, estoque_sistema, estoque_fisico)
-        VALUES (?, ?, ?)";
+$sql = "INSERT INTO estoque (produto, estoque_sistema, estoque_fisico, data_venda)
+        VALUES (?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sii", $produto, $estoque_sistema, $estoque_fisico);
+$stmt->bind_param("siis", $produto, $estoque_sistema, $estoque_fisico, $data_venda);
 
 if ($stmt->execute()) {
     echo "Produto cadastrado com sucesso!";
@@ -34,4 +35,7 @@ if ($stmt->execute()) {
 // Fechar conexão
 $stmt->close();
 $conn->close();
+
+header("Location: formulario_estoque.php");
+exit();
 ?>
