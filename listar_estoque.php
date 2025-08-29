@@ -36,6 +36,53 @@ $result = $conn->query($sql);
         button:hover { background: #218838; }
         input, select { margin-left: 10px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; background: #28a745; color: #fff;  cursor: pointer;}
         input :hover, select:hover { background: #218838; }
+
+
+        /* Estilo padrão do select */
+.filtro-servicos {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 8px 12px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  font-weight: 600;
+  transition: background-color .2s, color .2s, border-color .2s;
+}
+
+/* Mudança de cor conforme a opção selecionada */
+.filtro-servicos:has(option:checked[value="GASOLINA COMUM"]) {
+  background-color: #d32f2f;  /* vermelho */
+  color: #fff;
+  border-color: #b71c1c;
+}
+
+.filtro-servicos:has(option:checked[value="GASOLINA DURA MAIS"]) {
+  background-color: #1565c0;  /* azul */
+  color: #fff;
+  border-color: #0d47a1;
+}
+
+.filtro-servicos:has(option:checked[value="ETANOL"]) {
+  background-color: #2e7d32;  /* verde */
+  color: #fff;
+  border-color: #1b5e20;
+}
+
+.filtro-servicos:has(option:checked[value="DIESEL S10"]) {
+  background-color: #424242;  /* preto claro (cinza escuro) */
+  color: #fff;
+  border-color: #212121;
+}
+
+/* (Opcional) colorir as opções no dropdown */
+.filtro-servicos option[value="GASOLINA COMUM"] { background-color: #ffcdd2; }
+.filtro-servicos option[value="GASOLINA DURA MAIS"] { background-color: #bbdefb; }
+.filtro-servicos option[value="ETANOL"] { background-color: #c8e6c9; }
+.filtro-servicos option[value="DIESEL S10"] { background-color: #e0e0e0; }
+
     </style>
 </head>
 <body>
@@ -48,7 +95,7 @@ $result = $conn->query($sql);
 <input type="date" id="dataFiltro" oninput="filtrarData()">
 
 <label for="filtroNome">Filtrar por serviços:</label>
-<select id="filtroNome" onchange="filtrarPorNome()">
+<select id="filtroNome" class="filtro-servicos" onchange="filtrarPorNome()">
     <option value="">Todos</option>
     <option value="GASOLINA COMUM">GASOLINA COMUM</option>
     <option value="GASOLINA DURA MAIS">GASOLINA DURA MAIS</option>
