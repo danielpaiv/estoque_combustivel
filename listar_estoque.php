@@ -33,6 +33,9 @@ $result = $conn->query($sql);
         .btn-editar:hover {  background: #e0a800; }
         .btn-excluir:hover {  background: #a71d2a; }
         button { margin-bottom: 20px; padding: 10px 15px; border: none; background: #28a745; color: #fff; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #218838; }
+        input, select { margin-left: 10px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; background: #28a745; color: #fff;  cursor: pointer;}
+        input :hover, select:hover { background: #218838; }
     </style>
 </head>
 <body>
@@ -44,8 +47,15 @@ $result = $conn->query($sql);
 <label for="dataFiltro">Filtrar por Data:</label>
 <input type="date" id="dataFiltro" oninput="filtrarData()">
 
- <label for="filtroNome">Filtrar por serviços:</label>
- <input type="text" id="filtroNome" onkeyup="filtrarPorNome()">
+<label for="filtroNome">Filtrar por serviços:</label>
+<select id="filtroNome" onchange="filtrarPorNome()">
+    <option value="">Todos</option>
+    <option value="GASOLINA COMUM">GASOLINA COMUM</option>
+    <option value="GASOLINA DURA MAIS">GASOLINA DURA MAIS</option>
+    <option value="ETANOL">ETANOL</option>
+    <option value="DIESEL S10">DIESEL S10</option>
+</select>
+
 
 <table id="clientesTabela">
     <thead>
