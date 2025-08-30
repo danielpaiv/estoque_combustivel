@@ -24,23 +24,97 @@ $result_produtos = $conn->query($sql_produtos);
   <meta charset="UTF-8">
   <title>Cadastro de Estoque</title>
   <style>
-    body {font-family: Arial, sans-serif;margin: 40px;background: #f9f9f9;color: #333;}
-    h1 {text-align: center;}
-    form {background: #fff;padding: 20px;border-radius: 10px;box-shadow: 0 2px 5px rgba(0,0,0,0.1);max-width: 400px;margin: 0 auto 30px;}
-    label {display: block;margin: 10px 0 5px;}
+    body {
+      background: linear-gradient(to bottom, #0a1b7e, #0080ff);
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      background: #a1a1a1ff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 80px;
+      border-radius: 15px;
+    }
+    label {
+      display: block;
+      margin: 20px 0 5px;
+    }
     input[type="text"],
-    input[type="number"] {width: 100%;padding: 8px;border: 1px solid #ccc;border-radius: 5px;}
-    button { margin-top: 15px; padding: 10px 15px; border: none; background: #007BFF; color: #fff; border-radius: 5px; cursor: pointer; }
-    button:hover {background: #0056b3;}
-    table {width: 100%;border-collapse: collapse;margin-top: 20px;}
-    th, td {padding: 10px;border: 1px solid #ccc;text-align: center;}
-    th {background: #007BFF;color: white;}
-    .btn-excluir {background: #dc3545;color: #fff;padding: 5px 10px;border: none;border-radius: 5px;cursor: pointer;}
-    .btn-excluir:hover {background: #a71d2a;}
-    select {width: 50%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; background: #28a745; color: #fff; cursor: pointer;}
-    select:hover { background: #218838; }
-    #data_venda:hover { background: #218838; }
-    #data_venda {padding: 8px; border: 1px solid #ccc; border-radius: 5px; background: #28a745; color: #fff; cursor: pointer; }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      border: none;
+      background: #007BFF;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .btn-excluir {
+      background: #dc3545;
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-excluir:hover {
+      background: #a71d2a;
+    }
+    select {
+      width: 80%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background: #28a745;
+      color: #fff;
+      cursor: pointer;
+    }
+    select:hover {
+      background: #218838;
+    }
+    #data_venda:hover {
+      background: #218838;
+    }
+    #data_venda {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background: #28a745;
+      color: #fff;
+      cursor: pointer;
+    }
+    header {
+      padding: 8px;
+      text-align: center;
+      margin-bottom: 70px;
+      position: fixed;
+      top: 0px;
+      left: 0;
+      right: 0;
+      background: #fff;
+      z-index: 1000;
+    }
 
 
     /* Estilo padrão do select */
@@ -87,88 +161,57 @@ $result_produtos = $conn->query($sql_produtos);
     .filtro-servicos option[value="GASOLINA DURA MAIS"] { background-color: #bbdefb; }
     .filtro-servicos option[value="ETANOL"] { background-color: #c8e6c9; }
     .filtro-servicos option[value="DIESEL S10"] { background-color: #e0e0e0; }
-
+    /* Faixa azul inclinada */
+    .faixa-inclinada {
+      position: absolute;/* Coloca a faixa atrás do conteúdo principal */
+      bottom: 0;/* Ajusta a posição para o fundo */
+      left: 0;/* Ajusta a posição para o fundo */
+      width: 100%;/* Preenche toda a largura da tela */
+      height: 70%;/* Preenche 70% da altura da tela */
+      background: linear-gradient(to bottom, #0a1b7e, #0080ff);/* Cria um gradiente azul */
+      position: absolute;/* Coloca a faixa atrás do conteúdo principal */
+      background-color: #0038a0;
+      clip-path: polygon(0 25%, 100% 0%, 100% 100%, 0% 100%);/* Inclinada para baixo */
+      transform: skewY(-10deg);/* Inclinada para baixo */
+      transform-origin: bottom left;/* Ajusta a origem da transformação */
+      z-index: 0;/* Coloca atrás do conteúdo principal */
+    }
   </style>
 </head>
 <body>
+    <div class="faixa-inclinada"></div>
+  <header>
+    <h1>Cadastro de Estoque</h1>
 
-<h1>Cadastro de Estoque</h1>
+    <button onclick="window.location.href='listar_estoque.php'">Listar Estoque</button>
+  </header>
 
-<button onclick="window.location.href='listar_estoque.php'">Listar Estoque</button>
+  <form  action="salvar_estoque.php"  method="POST" >
+      <label for="produto">Produto:</label>
+    <select  id="produto" class="filtro-servicos" name="produto" required>
+          <option value="">Selecione</option>
+          <?php
+          if ($result_produtos && $result_produtos->num_rows > 0) {
+              while($row = $result_produtos->fetch_assoc()) {
+                  echo "<option value='" . $row['produto'] . "'>" . $row['produto'] . "</option>";
+              }
+          } else {
+              echo "<option value=''>Nenhum produto encontrado</option>";
+          }
+          ?>
+      </select>
 
-<form  action="salvar_estoque.php"  method="POST" >
-    <label for="produto">Produto:</label>
-   <select  id="produto" class="filtro-servicos" name="produto" required>
-        <option value="">Selecione</option>
-        <?php
-        if ($result_produtos && $result_produtos->num_rows > 0) {
-            while($row = $result_produtos->fetch_assoc()) {
-                echo "<option value='" . $row['produto'] . "'>" . $row['produto'] . "</option>";
-            }
-        } else {
-            echo "<option value=''>Nenhum produto encontrado</option>";
-        }
-        ?>
-    </select>
+    <label for="sistema">Estoque do Sistema:</label>
+    <input type="number" id="sistema" name="estoque_sistema" required>
 
-  <label for="sistema">Estoque do Sistema:</label>
-  <input type="number" id="sistema" name="estoque_sistema" required>
+    <label for="fisico">Estoque Físico:</label>
+    <input type="number" id="fisico" name="estoque_fisico" required>
 
-  <label for="fisico">Estoque Físico:</label>
-  <input type="number" id="fisico" name="estoque_fisico" required>
+    <label for="data_venda">DATA:</label>
+    <input type="date" id="data_venda" name="data_venda" required>
 
-  <label for="data_venda">DATA:</label>
-  <input type="date" id="data_venda" name="data_venda" required>
-
-  <button type="submit">Cadastrar</button>
-</form>
-
-<table id="tabelaEstoque">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Produto</th>
-      <th>Estoque do Sistema</th>
-      <th>Estoque Físico</th>
-      <th>Diferença</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
-<script>
-  const form = document.getElementById('formEstoque');
-  const tabela = document.querySelector('#tabelaEstoque tbody');
-  let id = 1;
-
-  form.addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const produto = document.getElementById('produto').value.trim();
-    const sistema = parseFloat(document.getElementById('sistema').value);
-    const fisico = parseFloat(document.getElementById('fisico').value);
-    const diferenca = fisico - sistema;
-
-    const row = tabela.insertRow();
-    row.insertCell(0).textContent = id++;
-    row.insertCell(1).textContent = produto;
-    row.insertCell(2).textContent = sistema;
-    row.insertCell(3).textContent = fisico;
-    row.insertCell(4).textContent = diferenca;
-
-    const cellAcoes = row.insertCell(5);
-    const btnExcluir = document.createElement('button');
-    btnExcluir.textContent = 'Excluir';
-    btnExcluir.classList.add('btn-excluir');
-    btnExcluir.onclick = () => tabela.removeChild(row);
-    cellAcoes.appendChild(btnExcluir);
-
-    form.reset();
-  });
-
-
-</script>
+    <button type="submit">Cadastrar</button>
+  </form>
 
 </body>
 </html>
