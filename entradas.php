@@ -1,28 +1,30 @@
 <?php
-// Configurações do banco de dados
-$servername = "localhost"; // Ou o IP do servidor
-$username = "root"; // Usuário do MySQL
-$password = ""; // Senha do MySQL
-$dbname = "estoque_combustivel"; // Nome do banco de dados
+    // Configurações do banco de dados
+    $servername = "localhost"; // Ou o IP do servidor
+    $username = "root"; // Usuário do MySQL
+    $password = ""; // Senha do MySQL
+    $dbname = "estoque_combustivel"; // Nome do banco de dados
 
-// Criar conexão
-$conn = new mysqli($servername, $username, $password, $dbname);
+    // Criar conexão
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Verificar conexão
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
-}
+    // Verificar conexão
+    if ($conn->connect_error) {
+        die("Falha na conexão: " . $conn->connect_error);
+    }
 
-// Consultar os produtos no estoque
-$sql_produtos = "SELECT id, produto FROM produtos";
-$result_produtos = $conn->query($sql_produtos);
+    // Consultar os produtos no estoque
+    $sql_produtos = "SELECT id, produto FROM produtos";
+    $result_produtos = $conn->query($sql_produtos);
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Cadastro de Estoque</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENTRADAS DE COMBUSTIVEIS</title>
+</head>
   <style>
     body {
       background: linear-gradient(to bottom, #0a1b7e, #0080ff);
@@ -33,6 +35,7 @@ $result_produtos = $conn->query($sql_produtos);
     }
     h1 {
       text-align: center;
+      color: #fff;
     }
     form {
       background: #a1a1a1ff;
@@ -93,10 +96,10 @@ $result_produtos = $conn->query($sql_produtos);
     select:hover {
       background: #218838;
     }
-    #data_venda:hover {
+    #data_entrada:hover {
       background: #218838;
     }
-    #data_venda {
+    #data_entrada {
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 5px;
@@ -176,49 +179,36 @@ $result_produtos = $conn->query($sql_produtos);
       transform-origin: bottom left;/* Ajusta a origem da transformação */
       z-index: 0;/* Coloca atrás do conteúdo principal */
     }
-    h1 {
-      color: #fff;
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 1; /* Garante que o título fique acima da faixa */
-    }
   </style>
-</head>
 <body>
-    <div class="faixa-inclinada"></div>
-  
-    <h1>Cadastro de Estoque</h1>
+     <div class="faixa-inclinada"></div>
+        <h1>Entradas de Combustiveis</h1>
 
-    <button onclick="window.location.href='listar_estoque.php'">Listar Estoque</button>
-    <button onclick="window.location.href='entradas.php'">Entradas</button>
-  
+     <button onclick="window.location.href='listar_estoque.php'">Listar Estoque</button>
+     <button onclick="window.location.href='formulario_estoque.php'">Adicionar Estoque</button>
+     <button onclick="window.location.href='listar_entradas.php'">Listar Entradas</button>
 
-  <form  action="salvar_estoque.php"  method="POST" >
+    <form  action="salvar_entradas.php"  method="POST" >
       <label for="produto">Produto:</label>
-    <select  id="produto" class="filtro-servicos" name="produto" required autofocus>
-          <option value="">Selecione</option>
-          <?php
-          if ($result_produtos && $result_produtos->num_rows > 0) {
-              while($row = $result_produtos->fetch_assoc()) {
-                  echo "<option value='" . $row['produto'] . "'>" . $row['produto'] . "</option>";
-              }
-          } else {
-              echo "<option value=''>Nenhum produto encontrado</option>";
-          }
-          ?>
-      </select>
+        <select  id="produto" class="filtro-servicos" name="produto" required autofocus>
+            <option value="">Selecione</option>
+            <?php
+            if ($result_produtos && $result_produtos->num_rows > 0) {
+                while($row = $result_produtos->fetch_assoc()) {
+                    echo "<option value='" . $row['produto'] . "'>" . $row['produto'] . "</option>";
+                }
+            } else {
+                echo "<option value=''>Nenhum produto encontrado</option>";
+            }
+            ?>
+            </select>
+        <label for="quantidade">Quantidade:</label>
+        <input type="number" id="quantidade" name="quantidade" required>
 
-    <label for="sistema">Estoque do Sistema:</label>
-    <input type="number" id="sistema" name="estoque_sistema" required>
+        <label for="data_entrada">Data:</label>
+        <input type="date" id="data_entrada" name="data_entrada" required>
 
-    <label for="fisico">Estoque Físico:</label>
-    <input type="number" id="fisico" name="estoque_fisico" required>
-
-    <label for="data_venda">DATA:</label>
-    <input type="date" id="data_venda" name="data_venda" required>
-
-    <button type="submit">Cadastrar</button>
-  </form>
-
+        <button type="submit">Enviar</button>
+    </form>
 </body>
 </html>

@@ -1,30 +1,36 @@
 <?php
-// Configurações do banco de dados
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "estoque_combustivel";
+            // Configurações do banco de dados
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "estoque_combustivel";
 
-// Conectar ao MySQL
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
-}
+            // Criar conexão
+            $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Consultar todos os produtos
-$sql = "SELECT * FROM estoque ORDER BY id DESC";
-$result = $conn->query($sql);
+            // Verificar conexão
+            if ($conn->connect_error) {
+                die("Falha na conexão: " . $conn->connect_error);
+            }
 
-// Consultar os produtos no estoque
-$sql_produtos = "SELECT id, produto FROM produtos";
-$result_produtos = $conn->query($sql_produtos);
+            // Consultar as entradas
+            $sql = "SELECT * FROM entradas ORDER BY id DESC";
+            $result = $conn->query($sql);
+
+            // Consultar os produtos no estoque
+            $sql_produtos = "SELECT id, produto FROM produtos";
+            $result_produtos = $conn->query($sql_produtos);
+
+             // Fechar conexão
+            $conn->close();
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Estoque</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Entradas</title>
     <style>
         body { 
             font-family: Arial, sans-serif;
@@ -33,25 +39,7 @@ $result_produtos = $conn->query($sql_produtos);
              color: #333; 
              background-color: #0038a0;
             }
-        h1 { 
-            text-align: center; 
-        }
-        /*table { width: 100%; border-collapse: collapse; margin-top: 150px; }
-        th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
-        th { background: #007BFF; color: white;  }*/
-        .btn { padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; }
-        .btn-editar { text-decoration: none; background: #ffc107; color: #000; } 
-        .btn-excluir { text-decoration: none; background: #dc3545; color: #fff; }
-        .btn-editar:hover {  background: #e0a800; }
-        .btn-excluir:hover {  background: #a71d2a; }
-        button { margin-bottom: 20px; padding: 10px 15px; border: none; background: #28a745; color: #fff; border-radius: 5px; cursor: pointer; }
-        button:hover { background: #218838; }
-        input, select { margin-left: 10px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; background: #28a745; color: #fff;  cursor: pointer;}
-        input:hover, select:hover { background: #218838; }
-        #dataFiltro:hover {background: #218838;}
-
-
-        /* Estilo padrão do select */
+            /* Estilo padrão do select */
         .filtro-servicos {
         appearance: none;
         -webkit-appearance: none;
@@ -64,6 +52,11 @@ $result_produtos = $conn->query($sql_produtos);
         font-weight: 600;
         transition: background-color .2s, color .2s, border-color .2s;
         }
+         button { margin-bottom: 20px; padding: 10px 15px; border: none; background: #28a745; color: #fff; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #218838; }
+        input, select { margin-left: 10px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; background: #28a745; color: #fff;  cursor: pointer;}
+        input:hover, select:hover { background: #218838; }
+        #dataFiltro:hover {background: #218838;}
 
         /* Mudança de cor conforme a opção selecionada */
         .filtro-servicos:has(option:checked[value="GASOLINA COMUM"]) {
@@ -96,7 +89,7 @@ $result_produtos = $conn->query($sql_produtos);
         .filtro-servicos option[value="ETANOL"] { background-color: #c8e6c9; }
         .filtro-servicos option[value="DIESEL S10"] { background-color: #e0e0e0; }
 
-        header { 
+            header { 
             text-align: center; 
             margin-bottom: 70px; 
             position: fixed; 
@@ -104,12 +97,14 @@ $result_produtos = $conn->query($sql_produtos);
             left: 0; 
             right: 0; 
             background: #fff; 
-            z-index: 1000; }
-        table {
+            z-index: 1000; 
+            padding: 10px 0;
+            }
+            table {
             background: #fff;
             border-collapse: collapse;
             width: 100%;
-             margin-top: 135.5px;
+             margin-top: 155.5px;
         }
 
         th, td {
@@ -118,38 +113,20 @@ $result_produtos = $conn->query($sql_produtos);
             text-align: left;
            
         }
-
         .tabela-header th {
             position: sticky;
-            top: 135px; /* Ajuste conforme o layout */
+            top: 155px; /* Ajuste conforme o layout */
             background: #007BFF;
             color: white;
             z-index: 10; /* Mantém sobre as linhas */
         }
-        .faixa-inclinada {
-            position: absolute;/* Coloca a faixa atrás do conteúdo principal */
-            bottom: 0;/* Ajusta a posição para o fundo */
-            left: 0;/* Ajusta a posição para o fundo */
-            width: 100%;/* Preenche toda a largura da tela */
-            height: 70%;/* Preenche 70% da altura da tela */
-            background: linear-gradient(to bottom, #0a1b7e, #0080ff);/* Cria um gradiente azul */
-            position: absolute;/* Coloca a faixa atrás do conteúdo principal*/ 
-            background-color: #0038a0;
-            clip-path: polygon(0 25%, 100% 0%, 100% 100%, 0% 100%);/* Inclinada para baixo */
-            transform: skewY(-10deg);/* Inclinada para baixo */
-            transform-origin: bottom left;/* Ajusta a origem da transformação */
-            z-index: -10;/* Coloca atrás do conteúdo principal */
-        }
-
-            
     </style>
 </head>
 <body>
-    <!--<div class="faixa-inclinada"></div>-->
-    <header>
-        <h1>Lista de Estoque</h1>
+     <header>
+        <h1>Listar entradas</h1>
 
-        <button onclick="window.location.href='formulario_estoque.php'">Cadastrar Novo Produto</button>
+        <button onclick="window.location.href='entradas.php'">Cadastrar Nova entrada</button>
 
         <label for="dataFiltro">Filtrar por Data:</label>
         <input type="date" id="dataFiltro" oninput="filtrarData()">
@@ -175,48 +152,44 @@ $result_produtos = $conn->query($sql_produtos);
         </select>
 
     </header>
-
-<table id="clientesTabela">
-    <thead>
-        <tr class="tabela-header">
+    <table id="clientesTabela">
+        <thead>
+            <tr class="tabela-header">
                 <th>ID</th>
                 <th>Produto</th>
-                <th>Estoque do Sistema</th>
-                <th>Estoque Físico</th>
-                <th>Diferença</th>
-                <th>Data</th>
-                <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if ($result->num_rows > 0): ?>
-            <?php while($row = $result->fetch_assoc()): ?>
-                <tr>
-                    <td><?= $row['id'] ?></td>
-                    <td><?= htmlspecialchars($row['produto']) ?></td>
-                    <td><?= $row['estoque_sistema'] ?></td>
-                    <td><?= $row['estoque_fisico'] ?></td>
-                    <td><?= $row['diferenca'] ?></td>
-                    <td><?= $row['data_venda'] ?></td>
-                    <td>
-                        <a href="editar_estoque.php?id=<?= $row['id'] ?>" class="btn btn-editar">Editar</a>
-                        <a href="excluir_estoque.php?id=<?= $row['id'] ?>" class="btn btn-excluir" onclick="return confirm('Tem certeza que deseja excluir este item?')">Excluir</a>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <tr><td colspan="6">Nenhum produto cadastrado.</td></tr>
-        <?php endif; ?>
-    </tbody>
-</table>
-<script>
+                <th>Quantidade</th>
+                <th>Data de Entrada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $row['id'] . "</td>";
+                    echo "<td>" . $row['produto'] . "</td>";
+                    echo "<td>" . $row['quantidade'] . "</td>";
+                    echo "<td>" . $row['data_entrada'] . "</td>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='4'>Nenhuma entrada encontrada</td></tr>";
+            }
+
+           
+            ?>
+        </tbody>
+    </table>
+
+    <script>
         function filtrarData() {
             const input = document.getElementById('dataFiltro');
             const filter = input.value.toLowerCase();
             const table = document.getElementById('clientesTabela');
             const tr = table.getElementsByTagName('tr');
             for (let i = 1; i < tr.length; i++) {
-                const td = tr[i].getElementsByTagName('td')[5]; // coluna "Data"
+                const td = tr[i].getElementsByTagName('td')[3]; // coluna "Data"
                 if (td) {
                     const txtValue = td.textContent || td.innerText;
                     if (txtValue.toLowerCase().indexOf(filter) > -1) {
@@ -247,7 +220,3 @@ $result_produtos = $conn->query($sql_produtos);
 </script>
 </body>
 </html>
-
-<?php
-$conn->close();
-?>

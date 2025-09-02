@@ -41,21 +41,92 @@ $conn->close();
 <meta charset="UTF-8">
 <title>Editar Produto</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 40px; }
-form { max-width: 400px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; }
-label { display: block; margin-top: 10px; }
-input { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
-button { margin-top: 15px; padding: 10px 15px; border: none; background: #007BFF; color: #fff; border-radius: 5px; cursor: pointer; }
-button:hover { background: #0056b3; }
+body {
+  background: linear-gradient(to bottom, #0a1b7e, #0080ff);
+   font-family: Arial, sans-serif; 
+   margin: 40px; }
+form { 
+  max-width: 400px; 
+  margin: 0 auto; 
+  background: #fff; 
+  padding: 20px; 
+  border-radius: 10px; }
+label { 
+  display: block; 
+  margin-top: 10px; }
+input { 
+  width: 100%; 
+  padding: 8px; 
+  margin-top: 5px; 
+  border-radius: 5px; 
+  border: 1px solid #ccc; }
+button { 
+  margin-top: 15px; 
+  padding: 10px 15px; 
+  border: none; 
+  background: #007BFF; 
+  color: #fff; 
+  border-radius: 5px; 
+  cursor: pointer; }
+button:hover { 
+  background: #0056b3; }
+
+   /* Mudança de cor conforme o valor do input produto */
+.form-control[value="GASOLINA COMUM"] {
+    background-color: #d32f2f;  /* vermelho */
+    color: #fff;
+    border-color: #b71c1c;
+}
+
+.form-control[value="GASOLINA DURA MAIS"] {
+    background-color: #1565c0;  /* azul */
+    color: #fff;
+    border-color: #0d47a1;
+}
+
+.form-control[value="ETANOL"] {
+    background-color: #2e7d32;  /* verde */
+    color: #fff;
+    border-color: #1b5e20;
+}
+
+.form-control[value="DIESEL S10"] {
+    background-color: #424242;  /* cinza escuro */
+    color: #fff;
+    border-color: #212121;
+}
+
+.faixa-inclinada {
+      position: absolute;/* Coloca a faixa atrás do conteúdo principal */
+      bottom: 0;/* Ajusta a posição para o fundo */
+      left: 0;/* Ajusta a posição para o fundo */
+      width: 100%;/* Preenche toda a largura da tela */
+      height: 70%;/* Preenche 70% da altura da tela */
+      background: linear-gradient(to bottom, #0a1b7e, #0080ff);/* Cria um gradiente azul */
+      position: absolute;/* Coloca a faixa atrás do conteúdo principal */
+      background-color: #0038a0;
+      clip-path: polygon(0 25%, 100% 0%, 100% 100%, 0% 100%);/* Inclinada para baixo */
+      transform: skewY(-10deg);/* Inclinada para baixo */
+      transform-origin: bottom left;/* Ajusta a origem da transformação */
+      z-index: -10;/* Coloca atrás do conteúdo principal */
+    }
+    h1 {
+      position: relative;
+      z-index: 10; /* Garante que o título fique acima da faixa */
+      color: white;
+      text-align: center;
+      margin-bottom: 20px;
+    }
 </style>
 </head>
 <body>
+<div class="faixa-inclinada"></div>
 
-<h1>Editar Produto</h1>
+<center><h1>Editar Produto</h1></center>
 
 <form method="POST">
   <label>Produto:</label>
-  <input type="text" name="produto" value="<?= htmlspecialchars($produto) ?>" required>
+  <input type="text" name="produto" class="form-control" value="<?= htmlspecialchars($produto) ?>" required readonly>
 
   <label>Estoque do Sistema:</label>
   <input type="number" name="estoque_sistema" value="<?= $estoque_sistema ?>" required>
