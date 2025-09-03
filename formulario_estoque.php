@@ -22,7 +22,7 @@ $result_produtos = $conn->query($sql_produtos);
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Cadastro de Estoque</title>
+  <title>CADASTRO ESTOQUE</title>
   <style>
     body {
       background: linear-gradient(to bottom, #0a1b7e, #0080ff);
@@ -41,7 +41,7 @@ $result_produtos = $conn->query($sql_produtos);
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       max-width: 400px;
       position: absolute;
-      top: 60%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       padding: 80px;

@@ -39,12 +39,12 @@
     }
     form {
       background: #a1a1a1ff;
-      padding: 20px;
+      padding: 40px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       max-width: 400px;
       position: absolute;
-      top: 60%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       padding: 80px;
