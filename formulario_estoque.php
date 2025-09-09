@@ -59,7 +59,7 @@ $result_produtos = $conn->query($sql_produtos);
       border-radius: 5px;
     }
     button {
-      margin-top: 15px;
+      margin-top: 0px;
       padding: 10px 15px;
       border: none;
       background: #007BFF;
@@ -182,18 +182,20 @@ $result_produtos = $conn->query($sql_produtos);
       position: relative;
       z-index: 1; /* Garante que o título fique acima da faixa */
     }
+    
   </style>
 </head>
 <body>
     <div class="faixa-inclinada"></div>
   
     <h1>Cadastro de Estoque</h1>
-
+    
     <button onclick="window.location.href='listar_estoque.php'">Listar Estoque</button>
     <button onclick="window.location.href='entradas.php'">Entradas</button>
   
 
   <form  action="salvar_estoque.php"  method="POST" >
+    
       <label for="produto">Produto:</label>
     <select  id="produto" class="filtro-servicos" name="produto" required autofocus>
           <option value="">Selecione</option>
